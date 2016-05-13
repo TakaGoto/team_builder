@@ -1,26 +1,24 @@
-from src.cli import Cli
+from src.cli       import Cli
+from tests.io_mock import InputMock, OutputMock
 
 import unittest
 
 class ConsoleUiTests(unittest.TestCase):
   def test_promptsForNumberOfTeams(self):
     expectedPrompt = "Enter number of teams: "
-    cli = Cli(IoMock())
+    cli = Cli(InputMock(), OutputMock())
 
     cli.ask_team_number()
 
-    output = cli.io.output
+    output = cli.ui_output.output
     self.assertEqual(expectedPrompt, output)
 
-class IoMock:
-  def __init__(self):
-    self.output = ""
+  def test_ReadsUserInputAfterBeingPromptedForNumberOfTeams(self):
+    cli = Cli(InputMock(), OutputMock())
 
-  def write(self, output):
-    self.output = output
+    result = cli.ask_team_number()
 
-  def readline(self):
-    return "5"
+    self.assertIsNotNone(result)
 
 if __name__ == '__main__':
   unittest.main()
